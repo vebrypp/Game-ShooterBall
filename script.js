@@ -4,9 +4,9 @@ window.addEventListener('load', function() {
     let w, h;
     const canvas = document.querySelector('#myCanvas');
     const c = canvas.getContext('2d');
-    const game = new Game(w, h);
-
+    
     resizeCanvas();
+    const game = new Game(w, h);
 
     function resizeCanvas() {
         w = canvas.width = window.innerWidth;
@@ -18,8 +18,7 @@ window.addEventListener('load', function() {
         game.update();
         requestAnimationFrame(animationLoop);
     };
-
-    animationLoop();
+    animationLoop()
 
     window.addEventListener('resize', resizeCanvas);
 });
