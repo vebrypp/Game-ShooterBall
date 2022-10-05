@@ -8,32 +8,33 @@ export default class Game {
         this.h = h;
         this.controller = new Controller(this);
         this.player = new Player(this);
-        this.enemies = [];
         this.projectiles = [];
+        this.enemies = [];
         this.enemyTime = 0;
         this.enemySpawn = 100;
     };
     draw(context) {
-        this.player.draw(context);
-        this.projectiles.forEach(e => {
-            e.draw(context);
-        });
         if(this.enemyTime > this.enemySpawn) {
             this.enemyTime = 0;
             this.enemies.push(new Enemy(this));
         } else {
             this.enemyTime++;
         };
+        this.player.draw(context);
         this.enemies.forEach(e => {
+            e.draw(context);
+        });
+        this.projectiles.forEach(e => {
             e.draw(context);
         });
     };
     update() {
+        console.log(this.enemies)
         this.projectiles.forEach(e => {
             e.update(e.index);
         });
         this.enemies.forEach(e => {
-            e.update();
+            e.update(e.index);
         });
     };
 };

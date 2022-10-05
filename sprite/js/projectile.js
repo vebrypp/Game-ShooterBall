@@ -1,6 +1,6 @@
 export default class  Projectile {
     constructor(game) {
-        this.game = game
+        this.game = game;
         this.x = this.game.w / 2;
         this.y = this.game.h / 2;
         this.r = 5;
@@ -8,7 +8,7 @@ export default class  Projectile {
         this.angel = Math.atan2(this.game.controller.y - this.y, this.game.controller.x - this.x);
         this.vx = Math.cos(this.angel) * this.speed;
         this.vy = Math.sin(this.angel) * this.speed;
-        this.color = 'red';
+        this.color = this.game.player.color;
     };
     draw(c) {
         c.beginPath();
