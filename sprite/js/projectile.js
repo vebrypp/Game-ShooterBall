@@ -18,9 +18,22 @@ export default class  Projectile {
         c.closePath();
     };
     update(index) {
+        if(this.collision()) {
+            this.game.projectiles.splice(index, 1);
+        };
         this.x += this.vx;
         this.y += this.vy;
         if(this.x > this.game.w || this.x < 0 || this.y > this.game.h || this.y < 0)
         this.game.projectiles.splice(index, 1);
+    };
+    collision() {
+        let collision = false;
+        this.game.enemies.forEach((e) => {
+            let dx = e.x - this.x;
+            let dy = e.y - this.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if(distance < this.r + e.r) collision = true;
+        });
+        return collision;
     };
 };

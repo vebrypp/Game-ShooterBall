@@ -6,9 +6,9 @@ export default class Enemy {
         this.playerR = this.game.player.r;
         this.x = 0;
         this.y = 0;
-        this.r = rand(30, 50);
+        this.r = rand(50, 100);
         this.rInit = this.r;
-        this.reduceR = 10;
+        this.reduceR = this.rInit / 10;
         this.color = `rgba(${rand(0, 255)}, ${rand(0, 255)}, ${rand(0, 255)}, 1)`
     };
     draw(c) {
@@ -20,8 +20,8 @@ export default class Enemy {
     };
     update(index) {
         if(this.collision()) {
-            this.r -= this.rInit / this.reduceR;
-            if(this.r <= this.rInit / this.reduceR) this.game.enemies.splice(index, 1);
+            if(this.r <= this.reduceR) this.game.enemies.splice(index, 1);
+            else this.r -= this.reduceR;
         };
         let dx = this.playerX - this.x;
         let dy = this.playerY - this.y;
@@ -34,10 +34,10 @@ export default class Enemy {
             let dx = e.x - this.x;
             let dy = e.y - this.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
-            if(distance <= this.r) return collision = true;
+            if(distance <= this.r + e.r) return collision = true;
         });
         return collision;
-    }
+    };
 };
 
 function rand(max, min) {

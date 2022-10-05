@@ -16,7 +16,7 @@ window.addEventListener('load', function() {
         c.clearRect(0, 0, w, h);
         game.draw(c);
         game.update();
-        requestAnimationFrame(animationLoop);
+        if(!game.gameOver)requestAnimationFrame(animationLoop);
     };
     animationLoop()
 
