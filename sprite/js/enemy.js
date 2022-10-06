@@ -38,6 +38,7 @@ export class Enemy {
             if(distance <= this.r + e.r) {
                 collision = true;
                 this.game.projectiles.splice(e.index, 1);
+                this.game.score.update();
             };
         });
         return collision;

@@ -1,6 +1,7 @@
 import Player from './player.js';
-import { Enemy } from './enemy.js';
 import Controller from './controller.js';
+import Score from './score.js';
+import { Enemy } from './enemy.js';
 
 export default class Game {
     constructor(w, h) {
@@ -9,6 +10,7 @@ export default class Game {
         this.h = h;
         this.controller = new Controller(this);
         this.player = new Player(this);
+        this.score = new Score(this);
         this.projectiles = [];
         this.enemies = [];
         this.enemyTime = 0;
@@ -22,6 +24,7 @@ export default class Game {
             this.enemyTime++;
         };
         this.player.draw(context);
+        this.score.draw(context);
         this.enemies.forEach(e => {
             e.draw(context);
         });
