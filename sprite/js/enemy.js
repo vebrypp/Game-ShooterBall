@@ -1,3 +1,5 @@
+import Particle from "./particle.js";
+
 export class Enemy {
     constructor(game) {
         this.game = game;
@@ -12,7 +14,7 @@ export class Enemy {
         this.dy = (this.playerY - this.y) * this.speed * 0.001;
         this.rInit = this.r;
         this.reduceR = this.rInit / 10;
-        this.color = `rgba(${rand(0, 255)}, ${rand(0, 255)}, ${rand(0, 255)}, 1)`
+        this.color = `hsl(${rand(0, 360)}, 100%, 50%)`
     };
     draw(c) {
         c.beginPath();
@@ -23,8 +25,14 @@ export class Enemy {
     };
     update(index) {
         if(this.collision()) {
-            if(this.r <= this.rInit * 5 / 10) this.game.enemies.splice(index, 1);
-            else this.r -= this.reduceR;
+            if(this.r <= this.rInit * 5 / 10) {
+                this.game.enemies.splice(index, 1);
+                for(let i = 0; i < 20; i++) {
+                    this.game.particles.push(new Particle(this.game, this.x, this.y, this.color));
+                };
+            } else {
+                this.r -= this.reduceR
+            };
         };
         this.x += this.dx;
         this.y += this.dy;
