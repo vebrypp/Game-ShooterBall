@@ -1,8 +1,7 @@
 import Player from './player.js';
 import Controller from './controller.js';
 import Score from './score.js';
-// import Particle from './particle.js';
-import { Enemy } from './enemy.js';
+import { EnemyLeft, EnemyRight } from './enemy.js';
 
 export default class Game {
     constructor(w, h) {
@@ -14,9 +13,13 @@ export default class Game {
         this.score = new Score(this);
         this.particles = [];
         this.projectiles = [];
+        this.enemyType = []
         this.enemies = [];
-        this.enemyTime = 0;
-        this.enemySpawn = 100;
+        this.enemiesDefeated = [];
+        this.enemyTimeLeft = 0;
+        this.enemySpawnLeft = rand(100, 200);
+        this.enemyTimeRight = 0;
+        this.enemySpawnRight = rand(100, 200);
     };
     draw(context) {
         this.player.draw(context);
@@ -24,12 +27,6 @@ export default class Game {
         this.particles.forEach(e => {
             e.draw(context);
         });
-        if(this.enemyTime > this.enemySpawn) {
-            this.enemyTime = 0;
-            this.enemies.push(new Enemy(this));
-        } else {
-            this.enemyTime++;
-        };
         this.enemies.forEach(e => {
             e.draw(context);
         });
@@ -39,15 +36,31 @@ export default class Game {
     };
     update() {
         this.player.update();
+        this.enemyAdd();
         this.particles.forEach(e => {
-            e.update(e.index);
-        });
-        this.enemies.forEach(e => {
             e.update(e.index);
         });
         this.projectiles.forEach(e => {
             e.update(e.index);
         });
+        this.enemies.forEach((e) => {
+            e.update();
+            if(e.marked) this.enemies.splice(this.enemies.indexOf(e), 1), this.score.update();
+        });
+    };
+    enemyAdd() {
+        if(this.enemyTimeLeft > this.enemySpawnLeft) {
+            this.enemyTimeLeft = 0;
+            this.enemies.push(new EnemyLeft(this));
+        } else {
+            this.enemyTimeLeft++;
+        };
+        if(this.enemyTimeRight > this.enemySpawnRight) {
+            this.enemyTimeRight = 0;
+            this.enemies.push(new EnemyRight(this));
+        } else {
+            this.enemyTimeRight++;
+        };
     };
 };
 

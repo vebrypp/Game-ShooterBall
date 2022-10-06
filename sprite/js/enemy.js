@@ -7,14 +7,14 @@ export class Enemy {
         this.playerY = this.game.player.y;
         this.playerR = this.game.player.r;
         this.r = rand(50, 100);
-        this.x = 0;
+        this.x = '';
         this.y = rand(0 - this.r, this.game.h + this.r);
         this.speed = 3;
-        this.dx = (this.playerX - this.x) * this.speed * 0.001;
-        this.dy = (this.playerY - this.y) * this.speed * 0.001;
-        this.rInit = this.r;
-        this.reduceR = this.rInit / 10;
-        this.color = `hsl(${rand(0, 360)}, 100%, 50%)`
+        this.rMin = this.r / 5;
+        this.reduceR = this.rMin;
+        this.color = `hsl(${rand(0, 360)}, 100%, 50%)`;
+        this.marked = false;
+        this.particle = 20;
     };
     draw(c) {
         c.beginPath();
@@ -23,36 +23,47 @@ export class Enemy {
         c.fill();
         c.closePath();
     };
-    update(index) {
-        if(this.collision()) {
-            if(this.r <= this.rInit * 5 / 10) {
-                this.game.enemies.splice(index, 1);
-                for(let i = 0; i < 20; i++) {
-                    this.game.particles.push(new Particle(this.game, this.x, this.y, this.color));
-                };
-            } else {
-                this.r -= this.reduceR
-            };
-        };
+    update() {
         this.x += this.dx;
         this.y += this.dy;
+        if(this.collision()) {
+            this.r -= this.reduceR;
+            if(this.r < this.rMin) {
+                this.marked = true;
+                for(let i = 0; i < this.particle; i++) {
+                    this.game.particles.push(new Particle(this.game, this.x, this.y, this.color));
+                };
+            };
+        };
     };
     collision() {
         let collision = false;
-        this.game.projectiles.forEach((e) => {
+        this.game.projectiles.forEach(e => {
             let dx = e.x - this.x;
             let dy = e.y - this.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
-            if(distance <= this.r + e.r) {
-                collision = true;
-                this.game.projectiles.splice(e.index, 1);
-                this.game.score.update();
-            };
+            if(distance < e.r + this.r) this.game.projectiles.splice(e.index, 1), collision = true;
         });
         return collision;
+    };
+};
+export class EnemyLeft extends Enemy{
+    constructor(game) {
+        super(game);
+        this.x = 0 - this.r;
+        this.dx = (this.playerX - this.x) * this.speed * 0.001;
+        this.dy = (this.playerY - this.y) * this.speed * 0.001;
+    };
+};
+export class EnemyRight extends Enemy{
+    constructor(game) {
+        super(game);
+        this.x = this.game.w + this.r;
+        this.dx = (this.playerX - this.x) * this.speed * 0.001;
+        this.dy = (this.playerY - this.y) * this.speed * 0.001;
     };
 };
 
 function rand(max, min) {
     return Math.round(Math.random() * (max - min)) + min;
-}
+};
