@@ -1,5 +1,5 @@
 import Player from './player.js';
-import Enemy from './enemy.js';
+import { Enemy } from './enemy.js';
 import Controller from './controller.js';
 
 export default class Game {
@@ -10,17 +10,17 @@ export default class Game {
         this.controller = new Controller(this);
         this.player = new Player(this);
         this.projectiles = [];
-        this.enemies = [new Enemy(this)];
+        this.enemies = [];
         this.enemyTime = 0;
         this.enemySpawn = 100;
     };
     draw(context) {
-        // if(this.enemyTime > this.enemySpawn) {
-        //     this.enemyTime = 0;
-        //     this.enemies.push(new Enemy(this));
-        // } else {
-        //     this.enemyTime++;
-        // };
+        if(this.enemyTime > this.enemySpawn) {
+            this.enemyTime = 0;
+            this.enemies.push(new Enemy(this));
+        } else {
+            this.enemyTime++;
+        };
         this.player.draw(context);
         this.enemies.forEach(e => {
             e.draw(context);
@@ -31,11 +31,15 @@ export default class Game {
     };
     update() {
         this.player.update();
-        this.projectiles.forEach(e => {
+        this.enemies.forEach(e => {
             e.update(e.index);
         });
-        this.enemies.forEach(e => {
+        this.projectiles.forEach(e => {
             e.update(e.index);
         });
     };
 };
+
+function rand(max, min) {
+    return Math.round(Math.random() * (max - min)) + min;
+}
