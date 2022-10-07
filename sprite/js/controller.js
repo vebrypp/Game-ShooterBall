@@ -9,5 +9,10 @@ export default class Controller {
             this.y = e.y;
             game.projectiles.push(new Projectile(game))
         });
+        window.addEventListener('touchstart', (e) => {
+            this.x = e.x;
+            this.y = e.y;
+            game.projectiles.push(new Projectile(game))
+        });
     };
 };
