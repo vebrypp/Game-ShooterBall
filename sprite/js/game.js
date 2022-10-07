@@ -15,7 +15,6 @@ export default class Game {
         this.projectiles = [];
         this.enemyType = []
         this.enemies = [];
-        this.enemiesDefeated = [];
         this.enemyTimeLeft = 0;
         this.enemySpawnLeft = rand(100, 200);
         this.enemyTimeRight = 0;
@@ -61,6 +60,17 @@ export default class Game {
         } else {
             this.enemyTimeRight++;
         };
+    };
+    restart() {
+        this.gameOver = false
+        this.score.text = 0;
+        this.projectiles = [];
+        this.particles = [];
+        this.enemyType = []
+        this.enemies = [];
+        this.enemies = [];
+        this.enemyTimeLeft = 0;
+        this.enemyTimeRight = 0;
     };
 };
 
